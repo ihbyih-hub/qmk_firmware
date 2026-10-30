@@ -1,0 +1,22 @@
+name: Build Firmware
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: qmkfm/qmk_cli
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile C3 Pro Firmware
+        run: qmk compile -kb keychron/c3_pro/ansi/red -km default
+
+      - name: Upload Bin
+        uses: actions/upload-artifact@v4
+        with:
+          name: keychron_c3_pro_firmware
+          path: '*.bin'
